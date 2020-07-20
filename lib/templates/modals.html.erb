@@ -1,4 +1,4 @@
-<% @@models.each do |model| %>
+<% @@models.select{|m| m.table_name.present?}.each do |model| %>
   <div class="modal fade" id="<%= model.table_name %>" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
@@ -49,7 +49,8 @@
                 </tr>
               </thead>
               <tbody>
-                <% model.columns_hash.each_with_index do |(k, v), index| %>
+                <% model_columns_hash = model.try(:columns_hash) rescue nil %>
+                <% model_columns_hash&.each_with_index do |(k, v), index| %>
                   <tr>
                     <th><%= index + 1 %></th>
                     <td><%= k %></td>
